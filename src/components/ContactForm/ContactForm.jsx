@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import css from './ContactForm.module.css';
 import { addContact } from 'redux/operations.js';
+import { getContacts } from 'redux/selectors';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-
+  const contacts = useSelector(getContacts);
   const dispatch = useDispatch();
+
   const handleChange = (event) => {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
@@ -16,12 +18,11 @@ const ContactForm = () => {
       setName(fieldValue);
     } else if (fieldName === 'number') {
       setNumber(fieldValue);
-    }
+    } return
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
     if (name.trim() === '' || number.trim() === '') {
       return;
     }
@@ -36,6 +37,13 @@ const ContactForm = () => {
 
     setName('');
     setNumber('');
+
+    if (contacts.name === newContact.name) { 
+      setName('');
+      setNumber('');
+    };
+    alert(`${newContact.name} is already in contacts!`);
+    return;
   };
 
   return (
